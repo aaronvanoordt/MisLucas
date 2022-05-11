@@ -1,5 +1,6 @@
 #Imports
 
+from config import SECRET_KEY, DATABASE_URI
 from flask import Flask, redirect, render_template, request, jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -11,15 +12,15 @@ from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'memcached'
-app.config['SECRET_KEY'] = 'super secret key'
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:vanarcar08@localhost:5432/mislucas"
+app.config['SECRET_KEY'] = SECRET_KEY
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 #Conexión para consultas
-engine = create_engine('postgresql://postgres:vanarcar08@localhost:5432/mislucas')
+engine = create_engine('postgresql://postgres@localhost:5433/mislucas')
 Session = sessionmaker(engine)
 session = Session()
 
