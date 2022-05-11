@@ -32,7 +32,7 @@ class User(db.Model):
     surname = db.Column(db.String(32), nullable=False)
     email = db.Column(db.String(32), nullable=False)
     password = db.Column(db.String(32), nullable=False)
-    total = db.Column(db.Integer(), nullable=False)
+    total = db.Column(db.Integer())
 
     def calculate_total(money):
         total = Ingreso.query.get("Monto") - Egreso.query.get("Monto")
@@ -74,7 +74,8 @@ def login_todo():
     if con.count() > 0:
         return render_template('dashboard.html')
     else:
-        return "El usuario no existe"
+        return """<h1>El usuario no existe</h1>"""
+
     
 @app.route('/usuario_crear_registro', methods= ['POST'])
 def crear_usuario_todo():
@@ -86,9 +87,9 @@ def crear_usuario_todo():
     session.add(User(email=corr,name=nomb,surname=apell,password=contra))
     session.commit()
     
-    flash('Usuario Creado')
     
-    return render_template('register.html')
+    
+    return render_template('dashboard.html')
     
 @app.route('/usuario_recuperar')
 def recuperar_todo():
@@ -103,7 +104,7 @@ def recuperar_contra_todo():
     )
     
     if con.count() > 0:
-        flash('Su contraseña es: ' + con[0].contrasena)
+        flash('Su contraseña es: ' + con[0].password)
     else: flash('El usuario no existe')
     
     return render_template('recuperar.html')
