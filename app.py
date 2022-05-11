@@ -70,7 +70,7 @@ def login_todo():
     )
     
     if con.count() > 0:
-        return render_template('dashboard.html')
+        return redirect(url_for("dashboard"))
     else:
         return """<h1>El usuario no existe</h1>"""
 
@@ -110,6 +110,10 @@ def recuperar_contra_todo():
 @app.route('/usuario_create')
 def create_todo():
     return render_template('register.html')
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template('dashboard.html')
 
 
 #Runner
