@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        MisLucas
+    </title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
+</head>
+
+<body>
+    <h1>¡Bienvenido a MisLucas!</h1>
+    <h2>
+        Tienes acumulado: <span id="Total"></span>
+        <script>
+        
+        </script>
+    </h2>
+    
+    <table>
+        <tr>
+            <td>
+                <form onsubmit="event.preventDefault();onFormSubmit();" autocomplete="off">
+
+                    <div>
+                        <label>Monto</label><label class="validation-error hide" id="fullNameValidationError">This field is required.</label>
+                        <input type="number" name="fullName" id="fullName">
+                    </div>
+
+                    <div>
+                        <label>Detalle</label>
+                        <input type="text" name="empCode" id="empCode">
+                    </div>
+
+                    <div>
+                        <label>Tipo</label>
+                        <input type="text" name="salary" id="salary">
+                    </div>
+
+                    <div  class="form-action-buttons">
+                        <input type="submit" value="Submit">
+                    </div>
+
+                </form>
+            </td>
+            <td>
+                <h1>Movimientos</h1>
+                <table id="employeeList">
+                    <thead>
+                        <tr>
+                            <th>Monto</th>
+                            <th>Detalle</th>
+                            <th>Tipo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <script src="{{ url_for('static',filename='script.js') }}"> </script>
+</body>
+
+</html>
