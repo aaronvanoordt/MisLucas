@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Recuperar Contraseña</title>
+    <link rel="stylesheet" href="static\styles\login.css">
+  </head>
+  <body>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <section class="form-login">
+      <h5>Registrar</h5>
+      <form method="POST" action="/usuario_crear_registro">
+        <input class="controls" type="text" name="correo" value="" placeholder="Correo">
+        <input class="controls" type="text" name="nombre" value="" placeholder="Nombre">
+        <input class="controls" type="text" name="apellido" value="" placeholder="Apellido">
+        <input class="controls" type="password" name="contrasena" value="" placeholder="Contraseña">
+        <input class="buttons" type="submit" name="" value="Registrar">
+      </form>
+      <p>
+        <a href="{{url_for('login')}}">Regresar</a>
+      </p>
+
+    </section>
+  </body>
+</html>
