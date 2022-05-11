@@ -24,31 +24,27 @@ migrate = Migrate(app, db)
 #Models
  
 class User(db.Model):
-    __tablename__ = "Usuarios"
+    __tablename__ = "usuarios"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32), nullable=False)
     surname = db.Column(db.String(32), nullable=False)
     email = db.Column(db.String(32), nullable=False)
     password = db.Column(db.String(32), nullable=False)
-    total = db.Column(db.Integer())
+    transacciones= db.relationship("Transaccion", backref="usuario")
 
-    def calculate_total(money):
-        total = Ingreso.query.get("Monto") - Egreso.query.get("Monto")
-        return total
+    @property
+    def total(self):
+        return sum([t.monto for t in self.transacciones])
 
-class Ingreso(db.Model):
-    __tablename__ = "Ingresos"
+class Transaccion(db.Model):
+    __tablename__ = "transacciones"
     id = db.Column(db.Integer, primary_key=True)
+    user_id= db.Column(db.Integer,db.ForeignKey("usuarios.id"),nullable=False)
     monto= db.Column(db.Integer(), nullable=False)
     detalle= db.Column(db.Integer(), nullable=False)
     tipo= db.Column(db.String(), nullable=False)
 
-class Egreso(db.Model):
-    __tablename__ = "Egresos"
-    id = db.Column(db.Integer, primary_key=True)
-    monto= db.Column(db.Integer(), nullable=False)
-    detalle= db.Column(db.String(), nullable=False)
-    tipo= db.Column(db.String(), nullable=False)
+
 
 db.create_all()
 
