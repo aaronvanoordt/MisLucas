@@ -19,10 +19,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-#Conexión para consultas
-engine = create_engine('postgresql://postgres@localhost:5433/mislucas')
-Session = sessionmaker(engine)
-session = Session()
+
 
 #Models
  
@@ -66,7 +63,7 @@ def login_todo():
     usu= request.form.get('usuario', )
     contra= request.form.get('contrasena', )
     
-    con = session.query(User).filter(
+    con = User.query.filter(
         User.email == usu
     ).filter(
         User.password == contra
@@ -85,8 +82,9 @@ def crear_usuario_todo():
     apell= request.form.get('apellido', )
     contra= request.form.get('contrasena', )
     
-    session.add(User(email=corr,name=nomb,surname=apell,password=contra))
-    session.commit()
+    
+    db.session.add(User(email=corr,name=nomb,surname=apell,password=contra))
+    db.session.commit()
     
     
     
@@ -100,12 +98,10 @@ def recuperar_todo():
 def recuperar_contra_todo():
     usu= request.form.get('usuario', )
     
-    con = session.query(User.password).filter(
-        User.email == usu
-    )
+    u = User.query.filter(User.email == usu).first()
     
-    if con.count() > 0:
-        flash('Su contraseña es: ' + con[0].password)
+    if u :
+        flash('Su contraseña es: ' + u.password)
     else: flash('El usuario no existe')
     
     return render_template('recuperar.html')
