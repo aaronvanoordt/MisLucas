@@ -6,6 +6,15 @@
     <link rel="stylesheet" href="static\styles\login.css">
   </head>
   <body>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
     <section class="form-login">
       <h5>Ingresar</h5>
       <form method="POST" action="/usuario_login">
@@ -14,8 +23,8 @@
         <input class="buttons" type="submit" name="" value="Ingresar" >
       </form>
       <p>
-        <a href="{{url_for('create_todo')}}">Registrar</a> | 
-        <a href="{{url_for('recuperar_todo')}}">¿Olvidaste tu Contraseña?</a>
+        <a href="{{url_for('create')}}">Registrar</a> | 
+        <a href="{{url_for('recuperar')}}">¿Olvidaste tu Contraseña?</a>
       </p>
 
     </section>

@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    {{current_user}}
     <h1>¡Bienvenido a MisLucas!</h1>
     <h2>
         Tienes acumulado: <span id="Total"></span>
@@ -23,8 +24,8 @@
                 <form onsubmit="event.preventDefault();onFormSubmit();" autocomplete="off">
 
                     <div>
-                        <label>Monto</label><label class="validation-error hide" id="fullNameValidationError">This field is required.</label>
-                        <input type="number" name="fullName" id="fullName" placeholder="En soles">
+                        <label>Monto</label><label class="validation-error hide" id="montoValidationError">This field is required.</label>
+                        <input type="number" name="monto" id="monto" placeholder="En soles">
                     </div>
 
                     <div>
