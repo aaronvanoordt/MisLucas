@@ -32,7 +32,7 @@ class User(db.Model,UserMixin):
     surname = db.Column(db.String(32), nullable=False)
     email = db.Column(db.String(32), nullable=False)
     password = db.Column(db.String(32), nullable=False)
-    transacciones= db.relationship("Transaccion", backref="usuario")
+    transacciones= db.relationship("Transaccion", backref='usuarios')
 
     @property
     def total(self):
@@ -125,6 +125,7 @@ def registrar_transaccion():
     c = request.form.get("empCode", )
     d = request.form.get("salary", )
     t = Transaccion(user_id=a, monto=b, detalle=c, tipo=d)
+    data = mycursor.fetchall()
     db.session.add(t)
     db.session.commit()
     return redirect(url_for("dashboard"))
