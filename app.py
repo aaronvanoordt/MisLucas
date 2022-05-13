@@ -113,10 +113,22 @@ def recuperar_contra():
 def create():
     return render_template('register.html')
 
-@app.route("/dashboard")
+@app.route("/dashboard", methods=['GET', 'POST'])
 @login_required
 def dashboard():
     return render_template('dashboard.html')
+
+@app.route("/registrar_transaccion", methods=['POST'])
+def registrar_transaccion():
+    a = current_user.id 
+    b = request.form.get("monto")
+    c = request.form.get("empCode")
+    d = request.form.get("salary")
+    t = Transaccion(user_id=a, monto=b, detalle=c, tipo=d)
+    db.session.add(t)
+    db.session.commit
+    return redirect(url_for("dashboard"))
+    
 
 @app.route("/logout")
 @login_required
