@@ -50,6 +50,9 @@
                     <thead>
                         <tr>
                             <th>Monto</th>
+                            {%for i in current_user.transacciones%}
+                            {{current_user.transacciones[i].monto}}
+                            {%endfor%}
                             <th>Detalle</th>
                             <th>Tipo</th>
                             <th></th>
