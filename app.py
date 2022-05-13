@@ -43,7 +43,7 @@ class Transaccion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id= db.Column(db.Integer,db.ForeignKey("usuarios.id"),nullable=False)
     monto= db.Column(db.Integer(), nullable=False)
-    detalle= db.Column(db.Integer(), nullable=False)
+    detalle= db.Column(db.String(), nullable=False)
     tipo= db.Column(db.String(), nullable=False)
 
 db.create_all()
@@ -125,7 +125,6 @@ def registrar_transaccion():
     c = request.form.get("empCode", )
     d = request.form.get("salary", )
     t = Transaccion(user_id=a, monto=b, detalle=c, tipo=d)
-    data = mycursor.fetchall()
     db.session.add(t)
     db.session.commit()
     return redirect(url_for("dashboard"))
