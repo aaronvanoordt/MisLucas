@@ -121,12 +121,12 @@ def dashboard():
 @app.route("/registrar_transaccion", methods=['POST'])
 def registrar_transaccion():
     a = current_user.id 
-    b = request.form.get("monto")
-    c = request.form.get("empCode")
-    d = request.form.get("salary")
+    b = request.form.get("monto", )
+    c = request.form.get("empCode", )
+    d = request.form.get("salary", )
     t = Transaccion(user_id=a, monto=b, detalle=c, tipo=d)
     db.session.add(t)
-    db.session.commit
+    db.session.commit()
     return redirect(url_for("dashboard"))
     
 
