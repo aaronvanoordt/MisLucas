@@ -5,19 +5,21 @@
     <title>
         MisLucas
     </title>
+
+    <form action="/logout", style="text-align: right;">
+        <input type="submit" value="Logout"/>
+    </form>
+
+    <h1 style="text-align:center">¡Bienvenido a MisLucas, {{current_user.name}}!</h1>
+    
+    <h2 style="text-align:center">
+        Tienes acumulado: {{current_user.total}}<span id="Total"></span>
+    </h2>
+
     <link rel="stylesheet" href="static\styles\dashborad.css">
 </head>
 
 <body>
-    
-    <h1>¡Bienvenido a MisLucas, {{current_user.name}}!</h1>
-    <h2>
-        Tienes acumulado: {{current_user.total}}<span id="Total"></span>
-        <script>
-        
-        </script>
-    </h2>
-    
     <table>
         <tr>
             <td>
@@ -52,7 +54,7 @@
                             <th>Monto</th>
                            <th>Detalle</th>
                             <th>Tipo</th>
-                            <th></th>
+                            <th>Modificar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -69,9 +71,6 @@
             </td>
         </tr>
     </table>
-    <form action="/logout">
-        <input type="submit" value="Logout"/>
-    </form>
     <script src="{{ url_for('static',filename='script.js') }}"> </script>
 </body>
 
