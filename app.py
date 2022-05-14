@@ -60,7 +60,7 @@ def noautorizado():
 
 @app.route('/')
 def index():
-    return render_template('login4.html')
+    return render_template('login.html')
 
 @app.route('/usuario_login', methods= ['POST'])
 def login():

@@ -21,16 +21,16 @@
     <table>
         <tr>
             <td>
-                <form method="POST", action="/registrar_transaccion">
+                <form method="POST", action="/registrar_transaccion", autocomplete="off">
 
                     <div>
                         <label>Monto</label><label class="validation-error hide" id="montoValidationError">This field is required.</label>
-                        <input type="number" name="monto" id="monto" placeholder="En soles">
+                        <input type="number" name="monto" id="monto" placeholder="En soles, negativo para egresos">
                     </div>
 
                     <div>
                         <label>Detalle</label>
-                        <input type="text" name="empCode" id="empCode" placeholder="Describe tu movimiento">
+                        <input type="text" name="empCode" id="empCode" placeholder="Describe tu transacción">
                     </div>
 
                     <div>
@@ -50,18 +50,28 @@
                     <thead>
                         <tr>
                             <th>Monto</th>
-                            <th>Detalle</th>
+                           <th>Detalle</th>
                             <th>Tipo</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-
+                        {%for i in current_user.transacciones%} 
+                        <tr>
+                            <th>{{i.monto}} </th>
+                           <th>{{i.detalle}}</th>
+                            <th>{{i.tipo}} <br></th>
+                            <th></th>
+                        </tr>
+                        {%endfor%}
                     </tbody>
-                </table>
+                </table>    
             </td>
         </tr>
     </table>
+    <form action="/logout">
+        <input type="submit" value="Logout"/>
+    </form>
     <script src="{{ url_for('static',filename='script.js') }}"> </script>
 </body>
 
