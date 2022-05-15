@@ -75,7 +75,8 @@ def login():
         login_user(u)
         return redirect(url_for("dashboard"))
     else:
-        return """<h1>El usuario no existe</h1>"""
+        flash('El usuario no existe')
+        return redirect(url_for('index'))
 
     
 @app.route('/usuario_crear_registro', methods= ['POST'])
