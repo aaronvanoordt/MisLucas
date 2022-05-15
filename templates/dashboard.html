@@ -2,7 +2,7 @@
 {% block contenido %}
 
 <div class='d-flex p-3 justify-content-between'>
-    <h1>Bienvenido a MisLucas, {{current_user.name}} </h1>
+    <h1>Bienvenido a MisLucas, {{current_user.name + " " + current_user.surname}} </h1>
     <div >
         <a href='{{url_for("logout")}}' class='btn btn-danger'>Logout</a>
     </div>
