@@ -123,10 +123,63 @@ def registrar_transaccion():
     monto = request.form.get("monto", )
     detalle = request.form.get("detalle", )
     tipo = request.form.get("tipo", )
-    t = Transaccion(user_id=user, monto=monto, detalle=detalle, tipo=tipo)
-    db.session.add(t)
-    db.session.commit()
+    try:
+        t = Transaccion(user_id=user, monto=monto, detalle=detalle, tipo=tipo)
+        db.session.add(t)
+        db.session.commit()
+    except:
+        db.session.rollback()
+        flash('Error al crear la transaccion')
+    finally:
+        db.session.close()
     return redirect(url_for("dashboard"))
+
+@app.route("/editar_transaccion", methods=['POST'])
+def editar_transaccion():
+    user = current_user.id 
+    transaccion_id = request.form.get("transaccion_id", )
+    monto = request.form.get("monto", )
+    detalle = request.form.get("detalle", )
+    tipo = request.form.get("tipo", )
+    t = Transaccion.query.get(transaccion_id)
+    if not t:
+        flash('Esta transaccion no existe')
+    elif t.user_id!=user:
+        flash('Esta transaccion no pertenece al usuario actual')
+    else:
+        try:
+            t.monto=monto
+            t.detalle=detalle
+            t.tipo=tipo
+            db.session.commit()
+        except:
+            db.session.rollback()
+            flash('Error al editar la transaccion')
+        finally:
+            db.session.close()
+    return redirect(url_for("dashboard"))
+
+@app.route("/eliminar_transaccion", methods=['POST'])
+def eliminar_transaccion():
+    user = current_user.id 
+    transaccion_id=request.form.get('transaccion_id')
+    t = Transaccion.query.get(transaccion_id)
+    if not t:
+        flash('Esta transaccion no existe')
+    elif t.user_id!=user:
+        flash('Esta transaccion no pertenece al usuario actual')
+    else:
+        try:
+            db.session.delete(t)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            flash('Error al eliminar la transaccion')
+        finally:
+            db.session.close()
+    return redirect(url_for("dashboard"))
+
+
     
 
 @app.route("/logout")
