@@ -1,6 +1,4 @@
 #Imports
-from ast import Return
-from re import L
 from config import SECRET_KEY, DATABASE_URI
 from flask import Flask, redirect, render_template, request, jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
