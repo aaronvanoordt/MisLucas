@@ -1,77 +1,63 @@
-<!DOCTYPE html>
-<html>
+{% extends 'master.html' %}
+{% block contenido %}
 
-<head>
-    <title>
-        MisLucas
-    </title>
-
-    <form action="/logout", style="text-align: right;">
-        <input type="submit" value="Logout"/>
-    </form>
-
-    <h1 style="text-align:center">¡Bienvenido a MisLucas, {{current_user.name}}!</h1>
+<div class='d-flex p-3 justify-content-between'>
+    <h1>Bienvenido a MisLucas, {{current_user.name}} </h1>
+    <div >
+        <a href='{{url_for("logout")}}' class='btn btn-danger'>Logout</a>
+    </div>
     
-    <h2 style="text-align:center">
-        Tienes acumulado: {{current_user.total}}<span id="Total"></span>
-    </h2>
+</div>
 
-    <link rel="stylesheet" href="static\styles\dashborad.css">
-</head>
+<div class="row">
+    <div class="col-6 p-5">
+        <form method="POST" , action="/registrar_transaccion" , autocomplete="off">
+            <h2>Crear transacción</h2>
+            <div class='form-floating my-2'>
+                <input class='form-control' type="number" name="monto" id="monto"
+                    placeholder="En soles, negativo para egresos">
+                <label for='monto'>Monto</label>
+            </div>
 
-<body>
-    <table>
-        <tr>
-            <td>
-                <form method="POST", action="/registrar_transaccion", autocomplete="off">
+            <div class='form-floating my-2'>
+                <input class='form-control' type="text" name="detalle" id="detalle"
+                    placeholder="Describe tu transacción">
+                <label for='detalle'>Detalle</label>
+            </div>
 
-                    <div>
-                        <label>Monto</label><label class="validation-error hide" id="montoValidationError">This field is required.</label>
-                        <input type="number" name="monto" id="monto" placeholder="En soles, negativo para egresos">
-                    </div>
+            <div class='form-floating my-2'>
+                <input class='form-control' type="text" name="tipo" id="tipo" placeholder="Efectivo o digital">
+                <label for='tipo'>Tipo</label>
+            </div>
 
-                    <div>
-                        <label>Detalle</label>
-                        <input type="text" name="detalle" id="detalle" placeholder="Describe tu transacción">
-                    </div>
+            <input type="submit" value="Submit" class='btn btn-primary'>
 
-                    <div>
-                        <label>Tipo</label>
-                        <input type="text" name="tipo" id="tipo" placeholder="Efectivo o digital">
-                    </div>
+        </form>
+    </div>
 
-                    <div  class="form-action-buttons">
-                        <input type="submit" value="Submit">
-                    </div>
-
-                </form>
-            </td>
-            <td>
-                <h1>Movimientos</h1>
-                <table id="employeeList">
-                    <thead>
-                        <tr>
-                            <th>Monto</th>
-                           <th>Detalle</th>
-                            <th>Tipo</th>
-                            <th>Modificar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {%for i in current_user.transacciones%} 
-                        <tr>
-                            <th>{{i.monto}} </th>
-                           <th>{{i.detalle}}</th>
-                            <th>{{i.tipo}} <br></th>
-                            <th></th>
-                        </tr>
-                        {%endfor%}
-                    </tbody>
-                </table>    
-            </td>
-        </tr>
-    </table>
-    <script src="{{ url_for('static',filename='script.js') }}"> </script>
-</body>
-
-</html>
+    <div class="col-6 p-5">
+        <h2>Movimientos</h2>
+        <table id="Transacciones" class='table'>
+            <thead>
+                <tr>
+                    <th scope='col'>Monto</th>
+                    <th scope='col'>Detalle</th>
+                    <th scope='col'>Tipo</th>
+                    <th scope='col'>Modificar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for i in current_user.transacciones%}
+                <tr>
+                    <th>{{i.monto}} </th>
+                    <th>{{i.detalle}}</th>
+                    <th>{{i.tipo}}</th>
+                    <th> <button class='btn btn-sm btn-outline-secondary'>Editar</button> </th>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="{{ url_for('static',filename='script.js') }}"> </script>
+{% endblock %}
