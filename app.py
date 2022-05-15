@@ -79,37 +79,31 @@ def login():
         return redirect(url_for('index'))
 
     
-@app.route('/usuario_crear_registro', methods= ['POST'])
-def crear_usuario():
-    corr= request.form.get('correo', )
-    nomb= request.form.get('nombre', )
-    apell= request.form.get('apellido', )
-    contra= request.form.get('contrasena', )
-    u=User(email=corr,name=nomb,surname=apell,password=contra)
-    db.session.add(u)
-    db.session.commit()
-    login_user(u)
-    return redirect(url_for("dashboard"))
-    
-@app.route('/usuario_recuperar')
+@app.route('/usuario_recuperar', methods=['GET', 'POST'])
 def recuperar():
-    return render_template('recuperar.html')
-
-@app.route('/usuario_recuperar_contra', methods= ['POST'])
-def recuperar_contra():
-    usu= request.form.get('usuario', )
-    
-    u = User.query.filter(User.email == usu).first()
-    
-    if u :
-        flash('Su contraseña es: ' + u.password)
-    else: flash('El usuario no existe')
-    
-    return redirect(url_for("index"))
+    if request.method=='POST':
+        usu= request.form.get('usuario', )
+        u = User.query.filter(User.email == usu).first()
+        if u :
+            flash('Su contraseña es: ' + u.password)
+        else: 
+            flash('El usuario no existe')
         
+        return redirect(url_for("index"))
+    return render_template('recuperar.html')        
 
-@app.route('/usuario_create')
+@app.route('/usuario_create', methods=['GET', 'POST'])
 def create():
+    if request.method=='POST':
+        corr= request.form.get('correo', )
+        nomb= request.form.get('nombre', )
+        apell= request.form.get('apellido', )
+        contra= request.form.get('contrasena', )
+        u=User(email=corr,name=nomb,surname=apell,password=contra)
+        db.session.add(u)
+        db.session.commit()
+        login_user(u)
+        return redirect(url_for('dashboard'))
     return render_template('register.html')
 
 @app.route("/dashboard", methods=['GET', 'POST'])
