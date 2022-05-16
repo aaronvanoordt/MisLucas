@@ -36,8 +36,8 @@
 {% block contenido %}
 
 <div class="row">
-    <div class="col-6 p-5">
-        <img src="/static/images/billete.svg">
+    <div class="col-6">
+        <img src="/static/images/register.svg">
     </div>
     <div class="col-6 px-5">
         <a href="/" class='text-end'>
@@ -45,13 +45,13 @@
                 <img class="logo-size" src="/static/images/logo-light.svg" alt="" width='170px' >
             </div>
         </a>
-        <h3>Bienvenido a Mis Lucas!</h3>
-        <p>El poder del control de tu dinero en tus manos.</p>
+        <h1>Registrarse</h1>
+        <p>Hola! Registrate para continuar.</p>
         <div>
-            <a href="{{url_for('index')}}" class='btn btn-sm btn-outline-primary'>Login</a>
+            <p class="text-secondary">Ya tienes cuenta? Ingresa a <a href="{{url_for('index')}}">Login</a></p>
         </div>
 
-        <form method="POST">
+        <form method="POST" class="shadow-lg p-3 mb-5 bg-blue rounded">
             <div class='form-floating my-2' > 
                 <input class="form-control" type="text" name="correo" placeholder="E-mail Address" required>
                 <label for="correo">

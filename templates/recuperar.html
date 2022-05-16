@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -27,4 +27,37 @@
 
     </section>
   </body>
-</html>
+</html> -->
+
+{% extends "master.html" %}
+{% block contenido %}
+
+<div class="row">
+    <div class="col-6 p-5">
+        <img src="/static/images/security.svg">
+    </div>
+    <div class="col-6 px-5">
+        <a href="/" class='text-end'>
+            <div class="logo">
+                <img class="logo-size" src="/static/images/logo-light.svg" alt="" width='170px' >
+            </div>
+        </a>
+        <h3>Bienvenido a Mis Lucas!</h3>
+        <p>El poder del control de tu dinero en tus manos.</p>
+        <div>
+           <a href="{{url_for('index')}}">Login</a> │  <a  clas="" href="{{url_for('create')}}">Registrarse</a> 
+          </div>
+
+        <form method="POST", action="/usuario_recuperar">
+            <div class='form-floating my-2' > 
+                <input class="form-control" type="text" name="usuario" placeholder="E-mail Address" required>
+                <label for="usuario">
+                    Email Address
+                </label>
+            </div>
+            <button id="submit" type="submit" class="btn btn-primary me-2">Recuperar Contraseña</button> <a href="{{url_for('index')}}">Regresar</a>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

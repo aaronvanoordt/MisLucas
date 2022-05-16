@@ -1,13 +1,13 @@
 {% extends 'master.html' %}
 {% block contenido %}
+<br>
 
 <div class='d-flex p-3 justify-content-between'>
-    <h1>Bienvenido a MisLucas, {{current_user.name + " " + current_user.surname}} </h1>
+    <h1 style="font-weight: bold;">Bienvenido {{current_user.name + " " + current_user.surname}} </h1>
     <div >
         <a href='{{url_for("logout")}}' class='btn btn-danger'>Logout</a>
     </div>
 </div>
-    
 <h2 class="text-center text-success p-2"> Tienes acumulado: {{current_user.total}} </h2>
 
 <div class="row">
