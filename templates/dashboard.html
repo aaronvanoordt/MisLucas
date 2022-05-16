@@ -11,7 +11,7 @@
 <h2 class="text-center text-success p-2"> Tienes acumulado: {{current_user.total}} </h2>
 
 <div class="row">
-    <div class="col-6 p-5">
+    <div class="col-5 p-5">
         <form method="POST" , action="/registrar_transaccion" , autocomplete="off">
             <h2>Crear transacción</h2>
             <div class='form-floating my-2'>
@@ -37,11 +37,12 @@
         </form>
     </div>
 
-    <div class="col-6 p-5">
+    <div class="col-7 p-5">
         <h2>Movimientos</h2>
         <table id="Transacciones" class='table'>
             <thead>
                 <tr>
+                    <th scope='col'>Fecha</th>
                     <th scope='col'>Monto</th>
                     <th scope='col'>Detalle</th>
                     <th scope='col'>Tipo</th>
@@ -51,6 +52,7 @@
             <tbody>
                 {%for i in current_user.transacciones%}
                 <tr>
+                    <th>{{i.fecha.strftime("%d/%m/%y %I:%M%p")}} </th>
                     <th>{{i.monto}} </th>
                     <th>{{i.detalle}}</th>
                     <th>{{i.tipo}}</th>

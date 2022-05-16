@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user,login_required, current_user,UserMixin
 from flask_migrate import Migrate
 from flask.helpers import url_for
+from datetime import datetime
 
 
 #Configuration
@@ -43,7 +44,7 @@ class Transaccion(db.Model):
     monto= db.Column(db.Integer(), nullable=False)
     detalle= db.Column(db.String(), nullable=False)
     tipo= db.Column(db.String(), nullable=False)
-
+    fecha =db.Column(db.DateTime, nullable=False, default = datetime.now)
 db.create_all()
 
 #Routes
