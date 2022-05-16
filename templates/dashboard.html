@@ -59,6 +59,10 @@
         <form method="POST" action="/eliminar_transaccion" autocomplete="off" class="d-none" id="eliminar">
             <input value="" type="number" name="transaccion_id" class='transaccion_id' hidden>
         </form>
+
+        <form method="POST" action="/eliminar_transaccion_all" autocomplete="off" class="d-none" id="eliminar_all">
+        </form>
+
     </div>
 
 
@@ -89,7 +93,7 @@
                 {%endfor%}
             </tbody>
         </table>
-        <input type="button" value="Delete All" class='btn btn-primary btn-danger' href="eliminar">
+        <input type="button" value="Delete All" class='btn btn-primary btn-danger' onclick="eliminarAll()" href="eliminar">
     </div>
 </div>
 <script src="{{ url_for('static',filename='script.js') }}"> </script>

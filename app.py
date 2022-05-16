@@ -175,6 +175,23 @@ def eliminar_transaccion():
             db.session.close()
     return redirect(url_for("dashboard"))
 
+@app.route("/eliminar_transaccion_all", methods=['POST'])
+def eliminar_transaccion_all():
+    for t in current_user.transacciones:
+        if not t:
+            flash('Esta transaccion no existe')
+        else:
+            try:
+                db.session.delete(t)
+                db.session.commit()
+            except:
+                db.session.rollback()
+                flash('Error al eliminar la transaccion')
+            finally:
+                db.session.close()
+    return redirect(url_for("dashboard"))
+
+
 
     
 
@@ -183,6 +200,8 @@ def eliminar_transaccion():
 def logout():
     logout_user()
     return redirect(url_for("index"))
+
+
 
 
 #Runner
