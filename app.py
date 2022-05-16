@@ -50,7 +50,7 @@ db.create_all()
 #Routes
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    return User.query.get(int(user_id))
 
 @login_manager.unauthorized_handler
 def noautorizado():
@@ -110,7 +110,8 @@ def create():
 @app.route("/dashboard", methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    #Se orderna por fecha de transaccion  mas reciente >
+    return render_template('dashboard.html', transacciones=sorted(current_user.transacciones, key=lambda t:t.fecha, reverse=True)) 
 
 @app.route("/registrar_transaccion", methods=['POST'])
 def registrar_transaccion():
@@ -132,8 +133,8 @@ def registrar_transaccion():
 @app.route("/editar_transaccion", methods=['POST'])
 def editar_transaccion():
     user = current_user.id 
-    transaccion_id = request.form.get("transaccion_id", )
-    monto = request.form.get("monto", )
+    transaccion_id = int(request.form.get("transaccion_id", ))
+    monto = int(request.form.get("monto", ))
     detalle = request.form.get("detalle", )
     tipo = request.form.get("tipo", )
     t = Transaccion.query.get(transaccion_id)

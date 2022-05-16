@@ -12,30 +12,55 @@
 
 <div class="row">
     <div class="col-5 p-5">
-        <form method="POST" , action="/registrar_transaccion" , autocomplete="off">
+        <form method="POST" , action="/registrar_transaccion" , autocomplete="off" id="crear">
             <h2>Crear transacción</h2>
             <div class='form-floating my-2'>
-                <input class='form-control' type="number" name="monto" id="monto"
-                    placeholder="En soles, negativo para egresos">
+                <input class='form-control' type="number" name="monto" id="monto">
                 <label for='monto'>Monto</label>
             </div>
 
             <div class='form-floating my-2'>
-                <input class='form-control' type="text" name="detalle" id="detalle"
-                    placeholder="Describe tu transacción">
+                <input class='form-control' type="text" name="detalle" id="detalle">
                 <label for='detalle'>Detalle</label>
             </div>
 
             <div class='form-floating my-2'>
-                <input class='form-control' type="text" name="tipo" id="tipo" placeholder="Efectivo o digital">
+                <input class='form-control' type="text" name="tipo" id="tipo">
                 <label for='tipo'>Tipo</label>
             </div>
 
             <input type="submit" value="Submit" class='btn btn-primary'>
-            <input type="button" value="Fin de mes" class='btn btn-primary btn-danger' href="eliminar">
 
         </form>
+
+        <form method="POST" action="/editar_transaccion" autocomplete="off" class="d-none" id="editar">
+            <h2>Editar Transacción</h2>
+            <input value=""  type="number" name="transaccion_id" class='transaccion_id' hidden>
+            <div class='form-floating my-2'>
+                <input value="" class='form-control monto' type="number" name="monto" id="monto">
+                <label for='monto'>Monto</label>
+            </div>
+
+            <div class='form-floating my-2'>
+                <input value="" class='form-control detalle' type="text" name="detalle" id="detalle">
+                <label for='detalle'>Detalle</label>
+            </div>
+
+            <div class='form-floating my-2'>
+                <input value="" class='form-control tipo' type="text" name="tipo" id="tipo" >
+                <label for='tipo'>Tipo</label>
+            </div>
+
+            <input type="submit" value="Submit" class='btn btn-primary'>
+            <button type="button" class='btn btn-outline-secondary' onclick="crearTransaccion()">Cancel</button>
+
+        </form>
+
+        <form method="POST" action="/eliminar_transaccion" autocomplete="off" class="d-none" id="eliminar">
+            <input value="" type="number" name="transaccion_id" class='transaccion_id' hidden>
+        </form>
     </div>
+
 
     <div class="col-7 p-5">
         <h2>Movimientos</h2>
@@ -50,20 +75,21 @@
                 </tr>
             </thead>
             <tbody>
-                {%for i in current_user.transacciones%}
+                {%for i in transacciones%}
                 <tr>
                     <th>{{i.fecha.strftime("%d/%m/%y %I:%M%p")}} </th>
                     <th>{{i.monto}} </th>
                     <th>{{i.detalle}}</th>
                     <th>{{i.tipo}}</th>
                     <th> 
-                        <button class='btn btn-sm btn-outline-primary'>Editar</button> 
-                        <button class='btn btn-sm btn-outline-danger'>Eliminar</button> 
+                        <button class='btn btn-sm btn-outline-primary' onclick="editarTransccion('{{i.id}}', '{{i.monto}}', '{{i.detalle}}', '{{i.tipo}}' )">Editar</button> 
+                        <button class='btn btn-sm btn-outline-danger' onclick="eliminarTransaccion('{{i.id}}')">Eliminar</button> 
                     </th>
                 </tr>
                 {%endfor%}
             </tbody>
         </table>
+        <input type="button" value="Delete All" class='btn btn-primary btn-danger' href="eliminar">
     </div>
 </div>
 <script src="{{ url_for('static',filename='script.js') }}"> </script>
