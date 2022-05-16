@@ -84,7 +84,7 @@ def recuperar():
         usu= request.form.get('usuario', )
         u = User.query.filter(User.email == usu).first()
         if u :
-            flash('Su contraseña es: ' + u.password)
+            flash("Te enviamos un correo")
         else: 
             flash('El usuario no existe')
         
