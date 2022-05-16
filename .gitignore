@@ -3,3 +3,4 @@ env
 .vscode/
 config.py
 __pycache__/
+migrations/
