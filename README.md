@@ -35,5 +35,6 @@ Estando dentro de la carpeta que contenga el archivo, primero se deberá ejecuta
 2. Agregar a ese archivo la variable = "DATABASE_URI" y "SECRET_KEY"
 3. Cambiar variables = "DATABASE_URI" y "SECRET_KEY"
 4. Crear el virtual enviroment con psycopg2-binary, flask, flask-Migrate y flask-login usando pip install
+5. Correr el servidor y logearse o registrarse para entrar al dashboard para empezar a generar transacciones
 
 

@@ -20,8 +20,6 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 
-
-
 #Models
  
 class User(db.Model,UserMixin):
@@ -191,18 +189,11 @@ def eliminar_transaccion_all():
                 db.session.close()
     return redirect(url_for("dashboard"))
 
-
-
-    
-
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
-
-
-
 
 #Runner
 if __name__ == "__main__":
