@@ -29,7 +29,7 @@ class User(db.Model,UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32), nullable=False)
     surname = db.Column(db.String(32), nullable=False)
-    email = db.Column(db.String(32), nullable=False)
+    email = db.Column(db.String(32), nullable=False, unique=True)
     password = db.Column(db.String(32), nullable=False)
     transacciones= db.relationship("Transaccion", backref='usuarios')
 
