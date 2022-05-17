@@ -20,10 +20,13 @@ Flask_migrate: Para crear archivos de migración
 Se usó flask_login como el framework encargado de manejar el logeo de usuarios. Además, tenemos comparación entre variables ("==") de lo que el usuario ingresa en el front end con los datos que tenemos en nuestra base de datos
 
 # Endpoints
+Nuestra app cuenta con 12 endpoints en total. 7 de ellos están orientados al manejo del login del usuario, permitiéndole crear un espacio en la DB, recuperar su contraseña, logearse y desalogearse. El endpoint principal es "dashboard", es aquí donde se muestra la tabla principal de la aplicación de manera ordenada. Los siguientes 4 endpoints sirven para modificar las transacciones que genera un usuario, ya sea para crearlas, eliminarlas y editarlas; es decir, están encargadas del CRUD de los modelos.
 
 # Hosts
+El host del app es nuestra propia máquina apoyada de postgres, usando el puerto 5432.
 
 # Error Handling
+Cada endpoint cuenta con un esquema de try, except y finally para poder reaccionar en caso que exista un error en la plataforma, ya sea por parte del usuario o de la base de datos (front y back end respectivamente).
 
 # Deployment Scripts/Configuration
 Estando dentro de la carpeta que contenga el archivo, primero se deberá ejecutar el virtual enviroment que ha de contener todos los elementos de requirements.txt; una vez activo deberemos ejecutar el comando "python app.py" para correr el servidor.
@@ -32,5 +35,6 @@ Estando dentro de la carpeta que contenga el archivo, primero se deberá ejecuta
 2. Agregar a ese archivo la variable = "DATABASE_URI" y "SECRET_KEY"
 3. Cambiar variables = "DATABASE_URI" y "SECRET_KEY"
 4. Crear el virtual enviroment con psycopg2-binary, flask, flask-Migrate y flask-login usando pip install
+5. Correr el servidor y logearse o registrarse para entrar al dashboard para empezar a generar transacciones
 
 
