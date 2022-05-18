@@ -13,6 +13,7 @@ from datetime import datetime
 from flask_bcrypt import Bcrypt
 
 
+
 #Configuration
 
 app = Flask(__name__)

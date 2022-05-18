@@ -1,38 +1,7 @@
-<!-- <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Recuperar Contraseña</title>
-    <link rel="stylesheet" href="../static/styles/login.css">
-  </head>
-  <body>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-    <section class="form-login">
-      <h5>Recuperar Contraseña</h5>
-      <form method="POST">
-        <input class="controls" type="text" name="usuario" value="" placeholder="Usuario">
-        <input class="buttons" type="submit" name="" value="Recuperar Contraseña">
-      </form>
-      <p>
-        <a href="{{url_for('index')}}">Regresar</a>
-      </p>
-
-    </section>
-  </body>
-</html> -->
-
 {% extends "master.html" %}
 {% block contenido %}
 
-<div class="row">
+<div class="row w-100">
     <div class="col-6 p-5">
         <img src="/static/images/security.svg">
     </div>
