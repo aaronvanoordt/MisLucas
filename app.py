@@ -6,6 +6,7 @@ from flask_login import LoginManager, login_user, logout_user,login_required, cu
 from flask_migrate import Migrate
 from flask.helpers import url_for
 from datetime import datetime
+from flask_bcrypt import Bcrypt
 
 
 #Configuration
@@ -19,6 +20,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login_manager = LoginManager(app)
+bcrypt = Bcrypt(app)
 
 #Models
  
@@ -28,12 +30,20 @@ class User(db.Model,UserMixin):
     name = db.Column(db.String(32), nullable=False)
     surname = db.Column(db.String(32), nullable=False)
     email = db.Column(db.String(32), nullable=False, unique=True)
-    password = db.Column(db.String(32), nullable=False)
+    password = db.Column(db.String(64), nullable=False)
     transacciones= db.relationship("Transaccion", backref='usuarios')
 
     @property
     def total(self):
         return sum([t.monto for t in self.transacciones])
+    
+    def __init__(self,name, surname,email,password):
+        self.name=name
+        self.surname=surname
+        self.email=email
+        self.password= bcrypt.generate_password_hash(password).decode("utf-8")
+        return None
+    
 
 class Transaccion(db.Model):
     __tablename__ = "transacciones"
@@ -64,18 +74,17 @@ def login():
     usu= request.form.get('usuario', )
     contra= request.form.get('contrasena', )
     
-    u = User.query.filter(
-        User.email == usu
-    ).filter(
-        User.password == contra
-    ).first()
+    u = User.query.filter(User.email==usu).first()
     
-    if u:
-        login_user(u)
-        return redirect(url_for("dashboard"))
-    else:
+    if not u:
         flash('El usuario no existe')
         return redirect(url_for('index'))
+    elif not bcrypt.check_password_hash(u.password,contra):
+        flash('Contraseña incorrecta')
+        return redirect(url_for('index'))
+    else:
+        login_user(u)
+        return redirect(url_for("dashboard"))
 
     
 @app.route('/usuario_recuperar', methods=['GET', 'POST'])
@@ -98,7 +107,7 @@ def create():
         nomb= request.form.get('nombre', )
         apell= request.form.get('apellido', )
         contra= request.form.get('contrasena', )
-        u=User(email=corr,name=nomb,surname=apell,password=contra)
+        u=User(nomb,apell,corr,contra)
         db.session.add(u)
         db.session.commit()
         login_user(u)
