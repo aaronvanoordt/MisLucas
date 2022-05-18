@@ -1,4 +1,8 @@
 #Imports
+import email
+from typing import final
+
+from click import password_option
 from config import SECRET_KEY, DATABASE_URI
 from flask import Flask, redirect, render_template, request, jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
@@ -62,7 +66,7 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def noautorizado():
-    flash("PRIMERO INGRESA A TU CUENTA")
+    flash("Primero debes registrarte")
     return redirect(url_for("index"))
 
 @app.route('/')
@@ -107,11 +111,36 @@ def create():
         nomb= request.form.get('nombre', )
         apell= request.form.get('apellido', )
         contra= request.form.get('contrasena', )
-        u=User(nomb,apell,corr,contra)
-        db.session.add(u)
-        db.session.commit()
-        login_user(u)
-        return redirect(url_for('dashboard'))
+        if User.query.filter_by(email=corr).first():
+            flash("ERROR EMAIL: Un usuario con este correo ya existe")
+            return redirect(url_for('create'))
+        
+        if len(contra)<8:
+            flash("ERROR DE CONTRASEÑA: Tienes que tener minimo 8 caracteres")
+            return redirect(url_for('create'))
+    
+        if contra.islower():
+            flash("ERROR DE CONTRASEÑA: Tiene que tener minimo una mayúscula")
+            return redirect(url_for('create'))
+
+        if True not in [char.isdigit() for char in contra]:
+            flash("ERROR DE CONTRASEÑA: Tiene que tener minimo un número")
+            return redirect(url_for('create'))
+
+            
+        #error handling - manejo de errores
+        try:
+            u=User(nomb,apell,corr,contra)
+            db.session.add(u)
+            db.session.commit()
+            login_user(u)
+        except:
+            db.session.rollback()
+            flash("Error al crear usuario")
+            return redirect(url_for('create'))
+        else:
+            db.session.close()
+            return redirect(url_for('dashboard'))
     return render_template('register.html')
 
 @app.route("/dashboard", methods=['GET', 'POST'])
