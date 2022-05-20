@@ -12,9 +12,11 @@ MisLucas es una aplicación web que le permite a los usuarios registrar ingresos
 
 # Librerías/Imports
 Config: Es el archivo que contiene la configuración que debe ser independiente para cada persona. Está incluido en .gitignore ya que esta debe modificarse según cada usuario
+Datetime: Para tener el formato de fecha y hora al registrar nuestras transacciones
 Flask: Como framework que nos ayudará en el desarrollo web usando python
 Flask_login: Para manejar el registro y logeo de usuarios
 Flask_migrate: Para crear archivos de migración
+Flask_bcrypt: Utilizado para hashear las contraseñas y proteger datos sensibles
 
 # Autenticación
 Se usó flask_login como el framework encargado de manejar el logeo de usuarios. Además, tenemos comparación entre variables ("==") de lo que el usuario ingresa en el front end con los datos que tenemos en nuestra base de datos
