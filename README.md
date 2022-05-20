@@ -20,7 +20,18 @@ Flask_migrate: Para crear archivos de migración
 Se usó flask_login como el framework encargado de manejar el logeo de usuarios. Además, tenemos comparación entre variables ("==") de lo que el usuario ingresa en el front end con los datos que tenemos en nuestra base de datos
 
 # Endpoints
-Nuestra app cuenta con 12 endpoints en total. 7 de ellos están orientados al manejo del login del usuario, permitiéndole crear un espacio en la DB, recuperar su contraseña, logearse y desalogearse. El endpoint principal es "dashboard", es aquí donde se muestra la tabla principal de la aplicación de manera ordenada. Los siguientes 4 endpoints sirven para modificar las transacciones que genera un usuario, ya sea para crearlas, eliminarlas y editarlas; es decir, están encargadas del CRUD de los modelos.
+- '/' : Renderiza index.
+- '/usuario_login' : Mediante el metodo POST revisa que los datos ingresados existan.
+- '/usuario_recuperar' : Con los metodos GET y POST comprueba que los datos existan y redirecciona al index.
+- '/usuario_create' : Con GET y POST obtiene los datos necesarios para registrarse y especifica requerimientos para la contraseña.
+- '/dashboard' : Renderiza las transacciones mediante el metodo POST.
+- '/registrar_transaccion' : Se piden los datos necesarios para resgistrar una operacion y redirecciona al dashboard.
+- '/editar_transaccion' : Comprueba que los datos de la transacción a editar existan y que sea del usuario. Redirecciona al dashboard.
+- '/eliminar_transaccion' : Comprueba que los datos de la transacción a eliminar existan y que sea del usuario. Redirecciona al dashboard.
+- '/eliminar_transaccion_all' : Verifica que el usuario actual tenga transacciones para eliminar y redirecciona al dashboard.
+- '/logout' : Cierra sesión y redirige al index.
+
+Nuestra app cuenta con 10 endpoints en total. 5 de ellos están orientados al manejo del login del usuario, permitiéndole crear un espacio en la DB, recuperar su contraseña, logearse y desalogearse. El endpoint principal es "dashboard", es aquí donde se muestra la tabla principal de la aplicación de manera ordenada. Los otros 5 endpoints sirven para modificar las transacciones que genera un usuario, ya sea para crearlas, eliminarlas y editarlas; es decir, están encargadas del CRUD de los modelos.
 
 # Hosts
 El host del app es nuestra propia máquina apoyada de postgres, usando el puerto 5432.
@@ -30,6 +41,7 @@ Cada endpoint cuenta con un esquema de try, except y finally para poder reaccion
 
 # Deployment Scripts/Configuration
 Estando dentro de la carpeta que contenga el archivo, primero se deberá ejecutar el virtual enviroment que ha de contener todos los elementos de requirements.txt; una vez activo deberemos ejecutar el comando "python app.py" para correr el servidor.
+
 ## Configuration
 1. Crear archivo config.py
 2. Agregar a ese archivo la variable = "DATABASE_URI" y "SECRET_KEY"
