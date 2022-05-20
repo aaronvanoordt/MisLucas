@@ -1,4 +1,3 @@
-#Imports
 from config import SECRET_KEY, DATABASE_URI
 from flask import Flask, redirect, render_template, request, jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
@@ -42,7 +41,7 @@ class User(db.Model,UserMixin):
         self.name=name
         self.surname=surname
         self.email=email
-        self.password= bcrypt.generate_password_hash(password).decode("utf-8")
+        self.password=bcrypt.generate_password_hash(password).decode("utf-8")
         return None
     
 
