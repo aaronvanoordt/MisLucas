@@ -1,5 +1,5 @@
 from config import SECRET_KEY, DATABASE_URI
-from flask import Flask, redirect, render_template, request, jsonify, flash
+from flask import Flask, redirect, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user,login_required, current_user,UserMixin
 from flask_migrate import Migrate
@@ -63,7 +63,7 @@ def load_user(user_id):
 @login_manager.unauthorized_handler
 def noautorizado():
     flash("Primero debes registrarte")
-    return redirect(url_for("index"))
+    return redirect(url_for("index"),401)
 
 @app.route('/')
 def index():
@@ -139,13 +139,14 @@ def create():
             return redirect(url_for('dashboard'))
     return render_template('register.html')
 
-@app.route("/dashboard", methods=['GET', 'POST'])
+@app.route("/dashboard", methods=['GET'])
 @login_required
 def dashboard():
     #Se orderna por fecha de transaccion  mas reciente >
     return render_template('dashboard.html', transacciones=sorted(current_user.transacciones, key=lambda t:t.fecha, reverse=True)) 
 
 @app.route("/registrar_transaccion", methods=['POST'])
+@login_required
 def registrar_transaccion():
     user = current_user.id 
     monto = request.form.get("monto", )
@@ -163,6 +164,7 @@ def registrar_transaccion():
     return redirect(url_for("dashboard"))
 
 @app.route("/editar_transaccion", methods=['POST'])
+@login_required
 def editar_transaccion():
     user = current_user.id 
     transaccion_id = int(request.form.get("transaccion_id", ))
@@ -188,6 +190,7 @@ def editar_transaccion():
     return redirect(url_for("dashboard"))
 
 @app.route("/eliminar_transaccion", methods=['POST'])
+@login_required
 def eliminar_transaccion():
     user = current_user.id 
     transaccion_id=request.form.get('transaccion_id')
@@ -208,6 +211,7 @@ def eliminar_transaccion():
     return redirect(url_for("dashboard"))
 
 @app.route("/eliminar_transaccion_all", methods=['POST'])
+@login_required
 def eliminar_transaccion_all():
     for t in current_user.transacciones:
         if not t:
@@ -231,4 +235,4 @@ def logout():
 
 #Runner
 if __name__ == "__main__":
-	app.run(debug=True, port=5001)
+	app.run(debug=True, port=5002)
