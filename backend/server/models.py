@@ -1,4 +1,16 @@
+from re import A
+from backend.server import create, create_app
+from config import SECRET_KEY, DATABASE_URI
+from flask import Flask, redirect, render_template, request, flash
 
+from flask_login import LoginManager, login_user, logout_user,login_required, current_user,UserMixin
+from flask_migrate import Migrate
+from flask.helpers import url_for
+from datetime import datetime
+from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
+
+create_app()
 
 class User(db.Model,UserMixin):
     __tablename__ = "usuarios"
@@ -20,6 +32,16 @@ class User(db.Model,UserMixin):
         self.password=bcrypt.generate_password_hash(password).decode("utf-8")
         return None
     
+    def format(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "surname": self.surname,
+            "email": self.email,
+            "password": self.password,
+            "transacciones": self.transacciones
+        }
+    
 
 class Transaccion(db.Model):
     __tablename__ = "transacciones"
@@ -29,4 +51,8 @@ class Transaccion(db.Model):
     detalle= db.Column(db.String(), nullable=False)
     tipo= db.Column(db.String(), nullable=False)
     fecha =db.Column(db.DateTime, nullable=False, default = datetime.now)
+
+def setup_db():
+    return "hola"
+
 #db.create_all()
