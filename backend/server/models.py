@@ -1,16 +1,13 @@
-from re import A
-from backend.server import create, create_app
-from config import SECRET_KEY, DATABASE_URI
-from flask import Flask, redirect, render_template, request, flash
-
-from flask_login import LoginManager, login_user, logout_user,login_required, current_user,UserMixin
-from flask_migrate import Migrate
-from flask.helpers import url_for
-from datetime import datetime
-from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+from flask_bcrypt import bcrypt
+from flask_login import LoginManager, login_user, logout_user,login_required, current_user,UserMixin
 
-create_app()
+
+database_name='mislucas'
+datatabase_path='postgresql://{}@{}/{}'.format('postgres', 'localhost:5432', database_name)
+#postgresql://postgres@localhost:5432/mislucas
+db = SQLAlchemy()
 
 class User(db.Model,UserMixin):
     __tablename__ = "usuarios"
