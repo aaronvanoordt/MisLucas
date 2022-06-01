@@ -39,7 +39,7 @@ class User(db.Model,UserMixin):
             "transacciones": self.transacciones
         }
     
-
+    
 class Transaccion(db.Model):
     __tablename__ = "transacciones"
     id = db.Column(db.Integer, primary_key=True)
@@ -51,5 +51,15 @@ class Transaccion(db.Model):
 
 def setup_db():
     return "hola"
+
+def insert(self):
+        db.session.add(self)
+        db.session.commit
+
+def update(self):
+    db.session.commit()
+
+def delete(self):
+    db.session.delete(self)
 
 #db.create_all()

@@ -1,7 +1,6 @@
-from config import SECRET_KEY, DATABASE_URI
 from flask import Flask, redirect, render_template, request, flash, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import login_manager, login_user, logout_user,login_required, current_user,UserMixin
+from flask_login import LoginManager, login_manager, login_user, logout_user,login_required, current_user, UserMixin
 from flask_migrate import Migrate
 from flask.helpers import url_for
 from datetime import datetime
@@ -10,14 +9,16 @@ from flask_cors import CORS, cross_origin
 from models import setup_db, User, Transaccion
 
 database_name='mislucas'
-datatabase_path='postgresql://{}@{}/{}'.format('postgres', 'localhost:5432', database_name)
+datatabase_path='postgresql://{}@{}/{}'.format('postgres: vanarcar08', 'localhost:5432', database_name)
 #postgresql://postgres@localhost:5432/mislucas
 db = SQLAlchemy()
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    setup_db(app)
+    setup_db()
     CORS(app)
+    login_manager = LoginManager()
+    login_manager.init_app(app)
 
     @app.after_request
     def after_request(response):
@@ -136,8 +137,7 @@ def create_app(test_config=None):
         tipo = request.form.get("tipo", )
         try:
             t = Transaccion(user_id=user, monto=monto, detalle=detalle, tipo=tipo)
-            db.session.add(t)
-            db.session.commit()
+            Transaccion.insert(t)
         except:
             db.session.rollback()
             flash('Error al crear la transaccion')
@@ -163,7 +163,7 @@ def create_app(test_config=None):
                 t.monto=monto
                 t.detalle=detalle
                 t.tipo=tipo
-                db.session.commit()
+                Transaccion.update()
             except:
                 db.session.rollback()
                 flash('Error al editar la transaccion')
@@ -183,8 +183,7 @@ def create_app(test_config=None):
             flash('Esta transaccion no pertenece al usuario actual')
         else:
             try:
-                db.session.delete(t)
-                db.session.commit()
+                Transaccion.delete(t)
             except:
                 db.session.rollback()
                 flash('Error al eliminar la transaccion')
