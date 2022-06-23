@@ -6,16 +6,13 @@ from flask.helpers import url_for
 from datetime import datetime
 from flask_bcrypt import bcrypt
 from flask_cors import CORS, cross_origin
-from models import setup_db, User, Transaccion
+from app.models import setup_db, User, Transaccion
 
-database_name='mislucas'
-datatabase_path='postgresql://{}@{}/{}'.format('postgres: vanarcar08', 'localhost:5432', database_name)
-#postgresql://postgres@localhost:5432/mislucas
-db = SQLAlchemy()
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    setup_db()
+    setup_db(app)
+    db = SQLAlchemy()
     CORS(app)
     login_manager = LoginManager()
     login_manager.init_app(app)
@@ -41,7 +38,7 @@ def create_app(test_config=None):
 
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        return User.query.get(user_id)
 
     @login_manager.unauthorized_handler
     def noautorizado():
@@ -214,4 +211,4 @@ def create_app(test_config=None):
         logout_user()
         return redirect(url_for("index"))
 
-    return app  
+    return app
