@@ -1,7 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from flask_bcrypt import bcrypt
+from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, logout_user,login_required, current_user,UserMixin
+from flask import Flask
+from flask_bcrypt import Bcrypt
+
+app = Flask(__name__)
+bcrypt = Bcrypt(app)
 
 
 database_name='mislucas'
@@ -12,8 +17,10 @@ db = SQLAlchemy()
 
 def setup_db(app, database_path=datatabase_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+    app.config["SECRET_KEY"] = "Super Secret Key"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
+    bcrypt = Bcrypt(app)
     db.init_app(app)
     db.create_all()
 

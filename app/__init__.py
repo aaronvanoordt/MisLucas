@@ -4,13 +4,14 @@ from flask_login import LoginManager, login_manager, login_user, logout_user,log
 from flask_migrate import Migrate
 from flask.helpers import url_for
 from datetime import datetime
-from flask_bcrypt import bcrypt
+from flask_bcrypt import Bcrypt
 from flask_cors import CORS, cross_origin
 from app.models import setup_db, User, Transaccion
 
 
 def create_app(test_config=None):
     app = Flask(__name__)
+    bcrypt = Bcrypt(app)
     setup_db(app)
     db = SQLAlchemy()
     CORS(app)
@@ -110,10 +111,9 @@ def create_app(test_config=None):
                 db.session.add(u)
                 db.session.commit()
                 login_user(u)
-            except:
+            except Exception as e:
                 db.session.rollback()
-                flash("Error al crear usuario")
-                return redirect(url_for('create'))
+                flash("ERROR: " + str(e))
             else:
                 db.session.close()
                 return redirect(url_for('dashboard'))
