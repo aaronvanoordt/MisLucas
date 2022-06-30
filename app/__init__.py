@@ -1,9 +1,9 @@
 from app.models import setup_db, User, Transaccion
 
-from flask import Flask, Blueprint, redirect, render_template, request, flash, abort
+from flask import Flask, Blueprint, redirect, render_template, request, flash
 from flask_login import LoginManager, login_manager, login_user, logout_user,login_required, current_user
 from flask.helpers import url_for
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
 login_manager = LoginManager()
 
@@ -57,7 +57,6 @@ def create_app(test_config=None):
         users = User.query.order_by("id").all()
 
         if len(users) == 0:
-            #abort(404)
             return {
                 "message": "No se encontaron usuarios"
             }, 404
@@ -163,7 +162,6 @@ def create_app(test_config=None):
                 "message": "La contraseña debe tener mínimo un número"
             }, 400
 
-        #error handling - manejo de errores
         try:
             u = User(name, surname, email, contra)
             u.insert()
