@@ -1,18 +1,17 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from datetime import datetime
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, logout_user,login_required, current_user,UserMixin
-from flask import Flask
-from flask_bcrypt import Bcrypt
-
-app = Flask(__name__)
-bcrypt = Bcrypt(app)
 
 
 database_name='mislucas'
 datatabase_path='postgresql://{}@{}/{}'.format('postgres:vanarcar08', 'localhost:5432', database_name)
 #postgresql://postgres@localhost:5432/mislucas
+
 db = SQLAlchemy()
+bcrypt = Bcrypt()
+migrate = Migrate()
 
 
 def setup_db(app, database_path=datatabase_path):
@@ -20,8 +19,9 @@ def setup_db(app, database_path=datatabase_path):
     app.config["SECRET_KEY"] = "Super Secret Key"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
-    bcrypt = Bcrypt(app)
     db.init_app(app)
+    bcrypt.init_app(app)
+    migrate.init_app(app, db)
     db.create_all()
 
 
@@ -67,13 +67,17 @@ class User(db.Model,UserMixin):
         finally:
             db.session.close()
     
-    def __init__(self,name, surname,email,password):
+    def __init__(self,name, surname,email, password):
         self.name=name
         self.surname=surname
         self.email=email
         self.password=bcrypt.generate_password_hash(password).decode("utf-8")
-        return None
+
     
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password, password)
+    
+
     def format(self):
         return {
             'id': self.id,

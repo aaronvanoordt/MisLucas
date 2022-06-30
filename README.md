@@ -30,7 +30,6 @@ Se usó flask_login como el framework encargado de manejar el logeo de usuarios.
 - '/registrar_transaccion' : Se piden los datos necesarios para resgistrar una operacion y redirecciona al dashboard.
 - '/editar_transaccion' : Comprueba que los datos de la transacción a editar existan y que sea del usuario. Redirecciona al dashboard.
 - '/eliminar_transaccion' : Comprueba que los datos de la transacción a eliminar existan y que sea del usuario. Redirecciona al dashboard.
-- '/eliminar_transaccion_all' : Verifica que el usuario actual tenga transacciones para eliminar y redirecciona al dashboard.
 - '/logout' : Cierra sesión y redirige al index.
 
 Nuestra app cuenta con 10 endpoints en total. 5 de ellos están orientados al manejo del login del usuario, permitiéndole crear un espacio en la DB, recuperar su contraseña, logearse y desalogearse. El endpoint principal es "dashboard", es aquí donde se muestra la tabla principal de la aplicación de manera ordenada. Los otros 5 endpoints sirven para modificar las transacciones que genera un usuario, ya sea para crearlas, eliminarlas y editarlas; es decir, están encargadas del CRUD de los modelos.

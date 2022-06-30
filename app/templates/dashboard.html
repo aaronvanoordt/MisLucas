@@ -12,7 +12,7 @@
 
 <div class="row w-100">
     <div class="col-5 p-5">
-        <form method="POST" , action="/registrar_transaccion" , autocomplete="off" id="crear">
+        <form method="POST" action="/registrar_transaccion" autocomplete="off" id="crear">
             <h2>Crear transacción</h2>
             <div class='form-floating my-2'>
                 <input class='form-control' type="number" name="monto" id="monto">
@@ -60,9 +60,6 @@
             <input value="" type="number" name="transaccion_id" class='transaccion_id' hidden>
         </form>
 
-        <form method="POST" action="/eliminar_transaccion_all" autocomplete="off" class="d-none" id="eliminar_all">
-        </form>
-
     </div>
 
 
@@ -93,7 +90,6 @@
                 {%endfor%}
             </tbody>
         </table>
-        <input type="button" value="Delete All" class='btn btn-primary btn-danger' onclick="eliminarAll()" href="eliminar">
     </div>
 </div>
 <script src="{{ url_for('static',filename='script.js') }}"> </script>

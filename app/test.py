@@ -47,9 +47,6 @@ def test_editar_transaccion():
 def test_eliminar_transaccion():
     return test_post("/eliminar_transaccion",401)
 
-def test_eliminar_transaccion_all():
-    return test_post("/eliminar_transaccion_all",401)
-
 def test_logout():
     return test_get("/logout",401)
 
@@ -75,6 +72,5 @@ if __name__ == "__main__":
     print("testeando elminiar transaccion....")
     print(test_eliminar_transaccion())
     print("testeando elminiar todas las transacciones....")
-    print(test_eliminar_transaccion_all())
     print("testeando logout....")
     print(test_logout())

@@ -1,7 +1,6 @@
 const crear=document.getElementById("crear")
 const editar=document.getElementById("editar")
 const eliminar= document.getElementById("eliminar")
-const eliminar_all= document.getElementById("eliminar_all")
 
 function editarTransccion(id, monto, detalle, tipo){ 
     //Se esconde el formulario de crear
@@ -12,8 +11,8 @@ function editarTransccion(id, monto, detalle, tipo){
     editar["monto"].value=monto
     editar["detalle"].value=detalle
     editar["tipo"].value=tipo
-
 }
+
 function crearTransaccion(){
     editar.classList.add("d-none")
     crear.classList.remove("d-none")
@@ -22,8 +21,4 @@ function crearTransaccion(){
 function eliminarTransaccion(id){
     eliminar["transaccion_id"].value=id
     eliminar.submit()
-}
-
-function eliminarAll(){
-    eliminar_all.submit()
 }
