@@ -1,4 +1,4 @@
-from app.models import setup_db, User, Transaccion
+from models import setup_db, User, Transaccion
 
 from flask import Flask, Blueprint, redirect, render_template, request, flash
 from flask_login import LoginManager, login_manager, login_user, logout_user,login_required, current_user

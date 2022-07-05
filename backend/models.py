@@ -2,8 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, login_user, logout_user,login_required, current_user,UserMixin
-
+from flask_login import UserMixin
 
 database_name='mislucas'
 datatabase_path='postgresql://{}@{}/{}'.format('postgres:vanarcar08', 'localhost:5432', database_name)
