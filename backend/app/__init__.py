@@ -94,7 +94,6 @@ def create_app(test_config=None):
         return t.format(), 200
 
     # POST
-
     @api.route('/signup', methods=['POST'])
     def api_signup():
         if current_user.is_authenticated:
@@ -104,9 +103,9 @@ def create_app(test_config=None):
             }, 400
 
         email = request.json.get('email')
-        name = request.json.get('nombre')
-        surname = request.json.get('apellido')
-        contra = request.json.get('contra')
+        name = request.json.get('name')
+        surname = request.json.get('surname')
+        password = request.json.get('password')
 
         if email is None:
             return {
@@ -114,7 +113,7 @@ def create_app(test_config=None):
                 "message": "No se ha enviado el email"
             }, 400
 
-        if contra is None:
+        if password is None:
             return {
                 "success": False,
                 "message": "No se ha enviado contraseña"
@@ -144,26 +143,26 @@ def create_app(test_config=None):
                 "message": "El email debe tener minimo 8 caracteres"
             }, 400
 
-        if len(contra) < 8:
+        if len(password) < 8:
             return {
                 "success": False,
                 "message": "La contraseña debe tener minimo 8 caracteres"
             }, 400
     
-        if contra.islower():
+        if password.islower():
             return {
                 "success": False,
                 "message": "La contraseña debe tener minimo una mayúscula"
             }, 400
 
-        if True not in [char.isdigit() for char in contra]:
+        if True not in [char.isdigit() for char in password]:
             return {
                 "success": False,
                 "message": "La contraseña debe tener mínimo un número"
             }, 400
 
         try:
-            u = User(name, surname, email, contra)
+            u = User(name, surname, email, password)
             u.insert()
             login_user(u)
         except Exception as e:
@@ -185,9 +184,9 @@ def create_app(test_config=None):
             }, 400
 
         email = request.json.get('email')
-        contra = request.json.get('contra')
+        password = request.json.get('password')
 
-        if contra is None:
+        if password is None:
             return {
                 "success": False,
                 "message": "No se ha enviado contraseña"
@@ -200,7 +199,7 @@ def create_app(test_config=None):
                 "success": False,
                 "message": "El usuario no existe"
             }, 404
-        elif not u.check_password(contra):
+        elif not u.check_password(password):
             return {
                 "success": False,
                 "message": "Contraseña incorrecta"
@@ -214,7 +213,7 @@ def create_app(test_config=None):
     @login_required
     def api_logout():
         logout_user()
-        return {"success": True}, 200
+        return {"success": True, 'message':'Successfully logged out.'}, 200
 
 
     @api.route("/transacciones", methods=['POST'])

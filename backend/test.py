@@ -14,8 +14,13 @@ class TestMisLucasAPI(unittest.TestCase):
         self.new_user = {
             "name": "test",
             "surname": "test",
-            "email": "test@gmail.com",
-            "password": "test"
+            "email": "test@test.com",
+            "password": "Contraseña123!"
+        }
+
+        self.actual_user = {
+            "email": "test@test.com",
+            "password": "Contraseña123!"
         }
 
         self.new_transaccion = {
@@ -26,62 +31,66 @@ class TestMisLucasAPI(unittest.TestCase):
         }
         
     #---------------Testing---------------
-    def test_get_all_users(self):
-        res = self.client().get('/users')
+    def test_get_users(self):
+        res0= self.client().post('/api/signup', json=self.new_user)
+        data0= json.loads(res0.data)
+
+        res = self.client().get('api/users')
         data = json.loads(res.data)
-        print(data)
-    
-    '''def test_get_all_transacciones(self):
-        res = self.client().get('/transacciones')
-        data = json.loads(res.data)
+        
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['users']))
 
-    def test_get_transaccion_by_id(self):
-        res = self.client().get('/transacciones/1')
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
     
     def test_signup(self):
-        res = self.client().post('/signup', data=self.new_user)
+        res= self.client().post('/api/signup', json=self.new_user) 
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertTrue(data['user'])
-        self.assertTrue(data['user']['id'])
-        self.assertTrue(data['user']['email'])
-        self.assertTrue(data['user']['name'])
-        self.assertTrue(data['user']['surname'])
-        self.assertTrue(data['user']['password'])
-        self.assertTrue(data['user']['total'])
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Un usuario con este email ya existe')
     
     def test_login(self):
-        res = self.client().post('/login', data=self.new_user)
+        res = self.client().post('/api/login', json=self.actual_user)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(data['user'])
-        self.assertTrue(data['user']['id'])
-        self.assertTrue(data['user']['email'])
-        self.assertTrue(data['user']['name'])
-        self.assertTrue(data['user']['surname'])
-        self.assertTrue(data['user']['password'])
-        self.assertTrue(data['user']['total'])
+        
     
     def test_logout(self):
-        res = self.client().post('/logout', headers={"Authorization": "Bearer " + self.get_token()})
+        res0 = self.client().post('/api/login', json=self.actual_user)
+        res = self.client().post('/api/logout')
         data = json.loads(res.data)
+
+        print(data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertEqual(data['message'], 'Successfully logged out.')
     
-    def test_add_transaccion(self):
+    '''def test_get_all_transacciones(self):
+        res= self.client().post('/api/login', json=self.actual_user)
+        data0= json.loads(res.data)
+        res = self.client().get('/api/transacciones')
+        data = json.loads(res.data)
+
+        print(data0)
+        print(data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)'''
+
+    '''def test_get_transaccion_by_id(self):
+        res = self.client().get('/transacciones/1')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)'''
+    
+    '''def test_add_transaccion(self):
         res = self.client().post('/transacciones', data=self.new_transaccion, headers={"Authorization": "Bearer " + self.get_token()})
         data = json.loads(res.data)
 
