@@ -128,6 +128,13 @@ class Transaccion(db.Model):
             db.session.rollback()
         finally:
             db.session.close()
+
+    def __init__(self,user_id,monto,detalle,tipo):
+        self.user_id=user_id
+        self.monto=monto
+        self.detalle=detalle
+        self.tipo=tipo
+        self.fecha=datetime.now()
     
     def format(self):
         return {
