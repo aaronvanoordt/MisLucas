@@ -31,10 +31,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
-import { logicalExpression } from '@babel/types';
 
 export default {
   name: "HomeView",
@@ -42,12 +40,4 @@ export default {
     HelloWorld,
   },
 };
-methods: {
-  login()
-  {
-    let result = axios.get('/api/users').then(response => {
-      console.log(response.data);
-    });
-  }
-}
-</script>s
+</script>
