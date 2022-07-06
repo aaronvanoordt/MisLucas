@@ -11,6 +11,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
     CORS(app)
+    
 
     api = Blueprint("api", __name__, url_prefix="/api")
 
@@ -175,9 +176,10 @@ def create_app(test_config=None):
             return {"success": True}, 200
 
 
-    @api.route('/login', methods=['POST'])
+    @api.route('/login', methods=['POST'], )
     def api_login():
         if current_user.is_authenticated:
+            
             return {
                 "success": False,
                 "message": "Usuario ya loggeado"
@@ -205,7 +207,7 @@ def create_app(test_config=None):
                 "message": "Contraseña incorrecta"
             }, 400
         else:
-            login_user(u)
+            login_user(u, remember=True)
             return {"success": True}, 200
 
 

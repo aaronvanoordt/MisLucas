@@ -1,6 +1,7 @@
 import unittest
 import json
 
+
 from app import create_app
 from models import setup_db
 
@@ -10,6 +11,7 @@ class TestMisLucasAPI(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.db = setup_db(self.app, "postgresql://postgres:vanarcar08@localhost:5432/testmislucas")
+        
 
         self.new_user = {
             "name": "test",
@@ -29,7 +31,8 @@ class TestMisLucasAPI(unittest.TestCase):
             "tipo": "ingreso",
             "fecha": "2020-01-01",
         }
-        
+
+
     #---------------Testing---------------
     def test_get_users(self):
         res0= self.client().post('/api/signup', json=self.new_user)
@@ -58,10 +61,27 @@ class TestMisLucasAPI(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
+    
+    def test_get_me(self):
+        res = self.client().post('/api/login', json=self.actual_user)
+        with self.client():
+            data0 = json.loads(res.data)
+            print(data0)
+
+            res = self.client().get('/api/me')
+            data = json.loads(res.data)
+            print(res.data)
+
+            self.assertEqual(res.status_code, 200)
+            self.assertEqual(data['success'], True)
+            
+            
+        
         
     
-    def test_logout(self):
+    '''def test_logout(self):
         res0 = self.client().post('/api/login', json=self.actual_user)
+        data0 = json.loads(res0.data)
         res = self.client().post('/api/logout')
         data = json.loads(res.data)
 
@@ -69,7 +89,7 @@ class TestMisLucasAPI(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['message'], 'Successfully logged out.')
+        self.assertEqual(data['message'], 'Successfully logged out.')'''
     
     '''def test_get_all_transacciones(self):
         res= self.client().post('/api/login', json=self.actual_user)
