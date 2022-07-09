@@ -1,21 +1,32 @@
 from models import setup_db, User, Transaccion
 
-from flask import Flask, Blueprint, redirect, render_template, request, flash
+from flask import Flask, Blueprint, jsonify, redirect, render_template, request, flash
 from flask_login import LoginManager, login_manager, login_user, logout_user,login_required, current_user
 from flask.helpers import url_for
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 
 login_manager = LoginManager()
 
 def create_app(test_config=None):
     app = Flask(__name__)
+    app.config["JWT_SECRET_KEY"] = 'm!SLUC4A$'
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
     setup_db(app)
-    CORS(app)
+    CORS(app, origins=['http://localhost:8080', 'https://localhost:5000'])
     
 
     api = Blueprint("api", __name__, url_prefix="/api")
 
     login_manager.init_app(app)
+    jwt = JWTManager(app)
+
+    @jwt.expired_token_loader
+    def expired_token_callback():
+        return jsonify({
+            'description': 'The token has expired.',
+            'error': 'token_expired'
+        }), 401
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -48,10 +59,13 @@ def create_app(test_config=None):
     def api_index():
         return {"message": "Bienvenido al API de MisLucas"}, 200
 
+    #@login_required
     @api.route('/me', methods=['GET'])
-    @login_required
+    @jwt_required()
     def api_me():
-        return current_user.format(), 200
+        uid = get_jwt_identity()
+        u = User.query.filter(User.id == uid).first()
+        return {"nombre": u.name , "apellidos": u.surname}, 200
 
     @api.route("/users", methods=["GET"])
     def get_users():
@@ -68,11 +82,15 @@ def create_app(test_config=None):
             "total_users": len(users)
         }, 200
 
+    #@login_required
     @api.route("/transacciones", methods=["GET"])
-    @login_required
+    @jwt_required()
     def get_transacciones():
+        uid = get_jwt_identity()
+        u = User.query.filter(User.id == uid).first()
+        t = Transaccion.query.filter(Transaccion.user_id == u.id).all()
         return {
-            "transacciones": [t.format() for t in current_user.transacciones]
+            "transacciones": [transaccion.format() for transaccion in t],
         }, 200
 
     @api.route("/transacciones/<id>", methods=["GET"])
@@ -165,26 +183,23 @@ def create_app(test_config=None):
         try:
             u = User(name, surname, email, password)
             u.insert()
-            login_user(u)
+            #login_user(u)
+            token = create_access_token(identity=u.id)
+            return {"success": True,"token": token}, 200
         except Exception as e:
             return {
                 "success": False,
                 "message": "Error al registrar usuario",
                 "error": str(e)
             }, 400
-        else:
-            return {"success": True}, 200
-
 
     @api.route('/login', methods=['POST'], )
     def api_login():
         if current_user.is_authenticated:
-            
             return {
                 "success": False,
                 "message": "Usuario ya loggeado"
             }, 400
-
         email = request.json.get('email')
         password = request.json.get('password')
 
@@ -205,22 +220,25 @@ def create_app(test_config=None):
             return {
                 "success": False,
                 "message": "Contraseña incorrecta"
-            }, 400
+            }, 401
         else:
             login_user(u, remember=True)
-            return {"success": True}, 200
+            token = create_access_token(identity=u.id)
+            return {"success": True,"token": token}, 200
 
-
+    #@login_required
     @api.route("/logout", methods=["POST"])
-    @login_required
+    @jwt_required()
     def api_logout():
         logout_user()
         return {"success": True, 'message':'Successfully logged out.'}, 200
 
 
     @api.route("/transacciones", methods=['POST'])
-    @login_required
+    #@login_required
+    @jwt_required()
     def api_registrar_transaccion():
+        
         monto = request.json.get("monto")
         detalle = request.json.get("detalle")
         tipo = request.json.get("tipo")
@@ -230,8 +248,8 @@ def create_app(test_config=None):
                 "success": False,
                 "message": "No se ha enviado el monto"
             }, 400
-
-        if not monto.isdigit():
+        
+        if monto is str:
             return {
                 "success": False,
                 "message": "El monto debe ser un número"
@@ -250,34 +268,37 @@ def create_app(test_config=None):
             }, 400
 
         try:
-            t = Transaccion(user_id=current_user.id, monto=int(monto), detalle=detalle, tipo=tipo)
+            uid = get_jwt_identity()
+            t = Transaccion(user_id=uid, monto=int(monto), detalle=detalle, tipo=tipo)
             t.insert()
+            return {"success": True, "fecha": t.fecha, "id": t.id}, 200
         except:
             return {
                 "success": False,
                 "message": "Error al registrar transaccion"
             }, 400
 
-        return {"success": True}, 200
+        
 
     # PATCH / PUT
 
     @api.route("/transacciones/<id>", methods=['PATCH'])
-    @login_required
+    #@login_required
+    @jwt_required()
     def api_editar_transaccion(id):
         monto = request.json.get("monto")
         detalle = request.json.get("detalle")
         tipo = request.json.get("tipo")
     
         t = Transaccion.query.get(id)
-
+        uid = get_jwt_identity()
         if t is None:
             return {
                 "success": False,
                 "message": "Transacción no encontrada"
             }, 404
 
-        if t.user_id != current_user.id:
+        if t.user_id != uid:
             return {
                 "success": False,
                 "message": "La transacción no le pertenece a este usuario"
@@ -324,17 +345,18 @@ def create_app(test_config=None):
     # DELETE
 
     @api.route("/transacciones/<id>", methods=['DELETE'])
-    @login_required
+    #@login_required
+    @jwt_required()
     def api_eliminar_transaccion(id):
         t = Transaccion.query.get(id)
-
+        uid = get_jwt_identity()
         if t is None:
             return {
                 "success": False,
                 "message": "Transacción no encontrada"
             }, 404
 
-        if t.user_id != current_user.id:
+        if t.user_id != uid:
             return {
                 "success": False,
                 "message": "La transacción no le pertenece a este usuario"

@@ -1,13 +1,5 @@
 <template>
-  <nav>
-    <img alt="Logo" src="frontend\src\assets\logo.png" />
-    <router-link to="/">Login</router-link> |
-    <router-link to="/about">Signup</router-link>
-    <h1>Bienvenido a MisLucas</h1>
-  </nav>
-  hola
   <router-view />
-  chau
   <footer>
     <p>&copy; MisLucas</p>
   </footer>
