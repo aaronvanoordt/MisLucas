@@ -73,7 +73,6 @@
             <ul>
               <li>Tener minimo 8 caracteres</li>
               <li>Tener minimo un numero</li>
-              <li>Tener minimo una letra mayuscula</li>
             </ul>
           </div>
         </div>

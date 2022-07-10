@@ -251,7 +251,7 @@ def create_app(test_config=None):
                 "message": "No se ha enviado el monto"
             }, 400
         
-        if not str(monto).isdigit():
+        if monto is str:
             return {
                 "success": False,
                 "message": "El monto debe ser un número"

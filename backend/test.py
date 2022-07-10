@@ -114,7 +114,7 @@ class TestMisLucasAPI(unittest.TestCase):
     
     '''def test_update_transaccion(self):
         res= self.client().post('/api/login', json=self.actual_user)
-        res = self.client().put('/api/transacciones/0', data=self.new_transaccion, headers=self.headers)
+        res = self.client().patch('/api/transacciones/0', data=self.new_transaccion, headers=self.headers)
         print(res.data)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
