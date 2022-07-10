@@ -5,7 +5,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
 
 database_name='mislucas'
-datatabase_path='postgresql://{}@{}/{}'.format('postgres:vanarcar08', 'localhost:5432', database_name)
+datatabase_path='postgresql://{}@{}/{}'.format('postgres:1234', 'localhost:5432', database_name)
 #postgresql://postgres@localhost:5432/mislucas
 
 db = SQLAlchemy()

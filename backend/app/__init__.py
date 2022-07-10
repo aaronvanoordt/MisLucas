@@ -13,7 +13,7 @@ def create_app(test_config=None):
     app.config["JWT_SECRET_KEY"] = 'm!SLUC4A$'
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
     setup_db(app)
-    CORS(app, origins=['http://localhost:8080', 'https://localhost:5000'])
+    CORS(app)
     
 
     api = Blueprint("api", __name__, url_prefix="/api")
@@ -249,7 +249,7 @@ def create_app(test_config=None):
                 "message": "No se ha enviado el monto"
             }, 400
         
-        if monto is str:
+        if not str(monto).isdigit():
             return {
                 "success": False,
                 "message": "El monto debe ser un número"
