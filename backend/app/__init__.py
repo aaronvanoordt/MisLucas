@@ -27,6 +27,7 @@ def create_app(test_config=None):
             'description': 'The token has expired.',
             'error': 'token_expired'
         }), 401
+    
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -65,7 +66,7 @@ def create_app(test_config=None):
     def api_me():
         uid = get_jwt_identity()
         u = User.query.filter(User.id == uid).first()
-        return {"nombre": u.name , "apellidos": u.surname}, 200
+        return {"nombre": u.name , "apellidos": u.surname, 'success': True}, 200
 
     @api.route("/users", methods=["GET"])
     def get_users():
@@ -91,6 +92,7 @@ def create_app(test_config=None):
         t = Transaccion.query.filter(Transaccion.user_id == u.id).all()
         return {
             "transacciones": [transaccion.format() for transaccion in t],
+            'success': True
         }, 200
 
     @api.route("/transacciones/<id>", methods=["GET"])
@@ -282,7 +284,7 @@ def create_app(test_config=None):
 
     # PATCH / PUT
 
-    @api.route("/transacciones/<id>", methods=['PATCH'])
+    @api.route("/transacciones/<id>", methods=['PATCH', 'PUT'])
     #@login_required
     @jwt_required()
     def api_editar_transaccion(id):

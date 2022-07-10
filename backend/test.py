@@ -1,5 +1,6 @@
 import unittest
 import json
+from flask_jwt_extended import create_access_token
 
 
 from app import create_app
@@ -11,8 +12,12 @@ class TestMisLucasAPI(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.db = setup_db(self.app, "postgresql://postgres:vanarcar08@localhost:5432/testmislucas")
+        self.app.app_context().push()
+        access_token = create_access_token(1)
+        self.headers = {
+            'Authorization': 'Bearer {}'.format(access_token)
+        }
         
-
         self.new_user = {
             "name": "test",
             "surname": "test",
@@ -27,7 +32,7 @@ class TestMisLucasAPI(unittest.TestCase):
 
         self.new_transaccion = {
             "monto": 100,
-            "descripcion": "test",
+            "detalle": "test",
             "tipo": "ingreso",
             "fecha": "2020-01-01",
         }
@@ -36,7 +41,6 @@ class TestMisLucasAPI(unittest.TestCase):
     #---------------Testing---------------
     def test_get_users(self):
         res0= self.client().post('/api/signup', json=self.new_user)
-        data0= json.loads(res0.data)
 
         res = self.client().get('api/users')
         data = json.loads(res.data)
@@ -63,73 +67,56 @@ class TestMisLucasAPI(unittest.TestCase):
         self.assertEqual(data['success'], True)
     
     def test_get_me(self):
-        res = self.client().post('/api/login', json=self.actual_user)
+     
+        res = self.client().post('/api/login', json=self.actual_user,headers=self.headers)
         with self.client():
-            data0 = json.loads(res.data)
-            print(data0)
-
-            res = self.client().get('/api/me')
+            res = self.client().get('/api/me', headers=self.headers)
             data = json.loads(res.data)
-            print(res.data)
 
             self.assertEqual(res.status_code, 200)
             self.assertEqual(data['success'], True)
             
-            
-        
-        
-    
-    '''def test_logout(self):
+
+    def test_logout(self):
         res0 = self.client().post('/api/login', json=self.actual_user)
         data0 = json.loads(res0.data)
-        res = self.client().post('/api/logout')
+        res = self.client().post('/api/logout', headers=self.headers)
         data = json.loads(res.data)
-
-        print(data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['message'], 'Successfully logged out.')'''
+        self.assertEqual(data['message'], 'Successfully logged out.')
     
-    '''def test_get_all_transacciones(self):
+    def test_get_all_transacciones(self):
         res= self.client().post('/api/login', json=self.actual_user)
         data0= json.loads(res.data)
-        res = self.client().get('/api/transacciones')
-        data = json.loads(res.data)
-
-        print(data0)
-        print(data)
-
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)'''
-
-    '''def test_get_transaccion_by_id(self):
-        res = self.client().get('/transacciones/1')
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)'''
-    
-    '''def test_add_transaccion(self):
-        res = self.client().post('/transacciones', data=self.new_transaccion, headers={"Authorization": "Bearer " + self.get_token()})
+        res = self.client().get('/api/transacciones', headers=self.headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(data['transaccion'])
+
     
-    def test_update_transaccion(self):
-        res = self.client().patch('/transacciones/1', data=self.new_transaccion, headers={"Authorization": "Bearer " + self.get_token()})
+    def test_add_transaccion(self):
+        res= self.client().post('/api/login', json=self.actual_user)
+        res = self.client().post('/api/transacciones', json=self.new_transaccion, headers=self.headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(data['transaccion'])
     
     def test_delete_transaccion(self):
-        res = self.client().delete('/transacciones/1', headers={"Authorization": "Bearer " + self.get_token()})
+        res = self.client().delete('api/transacciones/0', headers=self.headers)
         data = json.loads(res.data)
 
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['message'], "Transacción no encontrada")
+    
+    '''def test_update_transaccion(self):
+        res= self.client().post('/api/login', json=self.actual_user)
+        res = self.client().put('/api/transacciones/0', data=self.new_transaccion, headers=self.headers)
+        print(res.data)
+        data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['message'], 'Transaccion deleted.')'''
+        self.assertTrue(data['transaccion'])'''

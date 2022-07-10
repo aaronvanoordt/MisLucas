@@ -18,7 +18,9 @@
         <router-link to="/">Login</router-link> |
         <router-link to="/registro">Registrarse</router-link>
       </div>
-
+      <div class="alert alert-warning" v-if="show">
+        PROXIMAMENTE SE ABRIRÁ LA FUNCIONALIDAD DE RECUPERAR CONTRASEÑA.
+      </div>
       <form method="POST" action="#">
         <div class="form-floating my-2">
           <input
@@ -30,7 +32,12 @@
           />
           <label for="usuario"> Email Address </label>
         </div>
-        <button id="submit" type="submit" class="btn btn-primary me-2">
+        <button
+          id="submit"
+          type="button"
+          class="btn btn-primary me-2"
+          @click="submit"
+        >
           Recuperar Contrasena
         </button>
       </form>
@@ -39,7 +46,18 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data: () => {
+    return {
+      show: false,
+    };
+  },
+  methods: {
+    submit() {
+      this.show = true;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped></style>
